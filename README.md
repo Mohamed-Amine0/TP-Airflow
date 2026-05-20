@@ -26,6 +26,44 @@ Le DAG `weather_snapshot` s'exécute automatiquement chaque jour. Pour tester ma
 3. Cliquer sur le bouton Trigger DAG
 4. Vérifier les fichiers générés dans `data/weather_snapshots/`
 
+## Exercice 2 : Scheduling & météo par intervalle temporel
+
+Deux DAGs qui analysent les codes météo sur des intervalles de temps différents.
+
+### DAGs
+
+#### weather_hourly
+- Exécuté toutes les heures
+- Analyse des conditions météo sur 1 heure
+- Génère des rapports toutes les heures
+
+#### weather_daily  
+- Exécuté une fois par jour
+- Analyse des conditions météo sur 24 heures
+- Génère un rapport quotidien
+
+### Fonctionnalités
+
+- Utilisation des fenêtres temporelles Airflow (`data_interval_start`, `data_interval_end`)
+- Récupération des données historiques via l'API Archive d'Open-Meteo
+- Calcul de la distribution des codes météo
+- Identification du code météo dominant
+- Génération de rapports JSON avec :
+  - Intervalle traité
+  - Nombre total de mesures
+  - Distribution détaillée des codes météo
+  - Code météo dominant et sa description
+- Sauvegarde dans `data/weather_intervals/`
+
+### Exécution
+
+Les DAGs s'exécutent automatiquement selon leurs schedules. Pour tester manuellement :
+
+1. Accéder à http://localhost:8080/
+2. Localiser `weather_hourly` ou `weather_daily`
+3. Cliquer sur Trigger DAG
+4. Vérifier les rapports dans `data/weather_intervals/`
+
 ## Structure du projet
 
 ```
