@@ -1,0 +1,44 @@
+# Logs Airflow
+logs/
+*.log
+
+# Base de données
+airflow.db
+postres-db-volume/
+
+# Variables d'environnement
+.env
+.env.local
+
+# Cache Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environments
+venv/
+env/
+.venv
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Fichiers de sortie/données
+data/weather_snapshots/*
+data/weather_intervals/*
+data/weather_reports/*
+!data/weather_snapshots/.gitkeep
+!data/weather_intervals/.gitkeep
+!data/weather_reports/.gitkeep
+
+# Fichiers temporaires
+*.tmp
+*.temp
