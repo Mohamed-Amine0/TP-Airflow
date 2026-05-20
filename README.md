@@ -64,6 +64,79 @@ Les DAGs s'exécutent automatiquement selon leurs schedules. Pour tester manuell
 3. Cliquer sur Trigger DAG
 4. Vérifier les rapports dans `data/weather_intervals/`
 
+## Exercice 3 : Alertes météo Kafka
+
+DAG qui génère et publie des alertes météo sur Kafka en temps quasi-réel.
+
+### Fonctionnalités
+
+- Exécution toutes les minutes
+- Récupération des données météo actuelles via Open-Meteo
+- Analyse en temps réel :
+  - **Cold alert** : température < 5°C ET vitesse du vent > 20 km/h
+  - **Hot alert** : température > 35°C
+- Publication des alertes sur le topic Kafka `weather-alerts`
+- Chaque message contient :
+  - Ville
+  - Timestamp
+  - Température
+  - Vitesse du vent
+  - Code météo
+  - Type d'alerte
+  - Message descriptif
+
+### Architecture Kafka
+
+- **Zookeeper** : Coordination et gestion des brokers
+- **Kafka Broker** : Topic `weather-alerts` créé automatiquement
+- **Producteur** : Le DAG envoie les alertes
+- Port Kafka interne : 29092 (pour les conteneurs)
+- Port Kafka externe : 9092 (pour l'accès hôte)
+
+### Format des messages Kafka
+
+```json
+{
+  "city": "Paris",
+  "timestamp": "2026-05-20T14:30:45.123456",
+  "temperature": -2.5,
+  "wind_speed": 25.3,
+  "weather_code": 71,
+  "alert_type": "cold_alert",
+  "alert_level": "warning",
+  "message": "Attention : températures très froides (-2.5°C) avec vent fort (25.3 km/h)"
+}
+```
+
+### Exécution
+
+1. Accéder à http://localhost:8080/
+2. Localiser le DAG `weather_alert_stream`
+3. Cliquer sur Trigger DAG
+4. Les alertes sont publiées sur Kafka si les seuils sont dépassés
+5. Pour consommer les messages (optionnel) :
+
+```bash
+docker exec -it kafka kafka-console-consumer --bootstrap-server localhost:9092 --topic weather-alerts --from-beginning
+```
+
+## Infrastructure
+
+### Services Docker
+
+- **Airflow** : Orchestration des workflows
+- **PostgreSQL** : Base de données Airflow
+- **Redis** : Broker Celery
+- **Zookeeper** : Coordination Kafka
+- **Kafka** : Streaming d'événements
+
+### Volumes
+
+- `data/` : Dossier partagé pour les fichiers générés
+- `logs/` : Logs Airflow
+- `config/` : Configuration personnalisée
+- `postgres-db-volume/` : Données PostgreSQL
+
 ## Structure du projet
 
 ```
