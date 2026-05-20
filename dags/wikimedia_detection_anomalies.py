@@ -16,7 +16,7 @@ from typing import Dict, List, Tuple
 from collections import defaultdict
 
 from airflow import DAG
-from airflow.decorators import task
+from airflow.decorators import dag, task
 from airflow.exceptions import AirflowException
 
 
